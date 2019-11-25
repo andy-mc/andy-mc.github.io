@@ -1,12 +1,14 @@
 import os
-from flask import Flask, render_template, url_for, send_from_directory
+from flask import Flask, render_template, url_for, send_from_directory, request, redirect
 app = Flask(__name__)
 
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'airplane.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'),
+        'airplane.ico', mimetype='image/vnd.microsoft.icon'
+    )
 
 @app.route('/')
 @app.route('/index.html')
@@ -28,11 +30,18 @@ def about():
 @app.route('/contact.html')
 def contact():
     return render_template('contact.html')
+    
+@app.route('/<path:page_name>')
+def render_template_for(page_name):
+    return render_template(page_name)
 
-@app.route('/components.html')
-def components():
-    return render_template('components.html')
-
-@app.route('/submit_contact_form', methods=['POST', 'GET'])
+@app.route('/submit_contact_form', methods=['GET', 'POST'])
 def submit_contact_form():
-    return 'submit_contact_form'
+    if request.method == 'POST':
+        print('>>>>', request.form)
+        data = request.form.to_dict()
+        print(data)
+        return redirect('/thank_you.html')
+
+    else:    
+        return 'Something goes wrong !!'
