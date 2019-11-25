@@ -32,3 +32,7 @@ def contact():
 @app.route('/components.html')
 def components():
     return render_template('components.html')
+
+@app.route('/submit_contact_form', methods=['POST', 'GET'])
+def submit_contact_form():
+    return 'submit_contact_form'
